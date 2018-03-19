@@ -1,0 +1,55 @@
+{% extends 'base.html'%}
+
+{% block title%}{{ blog.title}}{% endblock %}
+{% block nav_blogs_active %}active{% endblock %}
+
+{% load staticfiles %}
+{% block css_extends %}
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/blog.css'%}">
+{% endblock %}
+
+{% block content%}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+                <h2>{{ blog.title }}</h2>
+                <ul class="blog_detail ">
+                    <li><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog:user_blogs' blog.author.id %}"">{{ blog.author.username }}</a></li>
+                    <li><span class="glyphicon glyphicon-tag" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog:blogs_with_type' blog.blog_type.id %}">{{ blog.blog_type.type_name }}</a></li>
+                    <li><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;{{ blog.last_updated_time|date:"Y-m-d" }}</li>
+                </ul>
+                <!-- &nbsp;&nbsp;&nbsp; -->
+                <hr/>
+                <p class="blog_content">{{ blog.content }}</p>
+
+
+
+                <!-- 前后篇文章 -->
+                <nav aria-label="...">
+                  <ul class="pager">
+                    {% if previous_blog %}
+                        <li class="previous"><a href="{% url 'blog:blog_detail' previous_blog.id %}"><span aria-hidden="true">&larr;</span>上一篇</a></li>
+                    {% else %}
+                        <li class="previous disabled"><a href="#"><span aria-hidden="true">&larr;</span>上一篇</a></li>
+                    {% endif %}
+
+                    {% if next_blog %}
+                        <li class="next"><a href="{% url 'blog:blog_detail' next_blog.id %}"><span aria-hidden="true">&rarr;</span>下一篇</a></li>
+                    {% else %}
+                        <li class="next disabled"><a href="#"><span aria-hidden="true">&rarr;</span>下一篇</a></li>
+                    {% endif %}
+                  </ul>
+                </nav>
+            </div>       
+        </div>
+    </div>
+
+{% endblock %}
+
+
+
+
+
+
+

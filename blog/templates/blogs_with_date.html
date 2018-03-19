@@ -1,0 +1,9 @@
+{% extends 'blog_list.html' %}
+
+
+{# 页面标题 #}
+{% block title%} 博客|{{ blogs_with_date }} {% endblock %}
+{# 主题内容 #}
+{% block nav_blogs_active %}active{% endblock %}
+
+{% block panel_type %}分类:{{ blogs_with_date }} {% endblock %}

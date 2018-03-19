@@ -1,0 +1,13 @@
+{% extends 'blog_list.html' %}
+
+
+{# 页面标题 #}
+{% block title%} {{ type.type_name}} {% endblock %}
+{# 主题内容 #}
+{% block nav_blogs_active %}active{% endblock %}
+
+{% block panel_type %}分类:{{ type.type_name }} {% endblock %}
+
+
+
+

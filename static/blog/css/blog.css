@@ -1,0 +1,24 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+
+ul.type_list{
+    list-style-type: none;
+}
+
+ul.blog_detail{
+    list-style-type: none;
+}
+
+ul.date_list{
+    list-style-type: none;
+}
+
+p.blog_content{
+    text-indent: 2em;
+}
+
+div#paginater{
+    text-align: center;
+}

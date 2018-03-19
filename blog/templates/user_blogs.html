@@ -1,0 +1,9 @@
+{% extends 'blog_list.html' %}
+
+
+{# 页面标题 #}
+{% block title%} {{ user.username}} {% endblock %}
+{# 主题内容 #}
+{% block nav_blogs_active %}active{% endblock %}
+{% block panel_type %}{{ user.username}}的博客{% endblock %}
+
