@@ -18,10 +18,12 @@
                     <li><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog:user_blogs' blog.author.id %}"">{{ blog.author.username }}</a></li>
                     <li><span class="glyphicon glyphicon-tag" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog:blogs_with_type' blog.blog_type.id %}">{{ blog.blog_type.type_name }}</a></li>
                     <li><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;{{ blog.last_updated_time|date:"Y-m-d" }}</li>
+                    <li><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>{{ blog.get_read_num }}
+                    </li>
                 </ul>
                 <!-- &nbsp;&nbsp;&nbsp; -->
                 <hr/>
-                <p class="blog_content">{{ blog.content }}</p>
+                <p class="blog_content">{{ blog.content|safe }}</p>
 
 
 
