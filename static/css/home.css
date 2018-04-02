@@ -1,8 +1,6 @@
 h3#home-content{
     font-size: 222%;
     text-align: center;
-    margin-top: 4em;
-    margin-bottom: 2em;
 }
 
 div#chart{
@@ -10,4 +8,7 @@ div#chart{
     height: 20em;
     min-width: 20em;
     max-width: 30em;
+}
+ul{
+    list-style-type: none;
 }
