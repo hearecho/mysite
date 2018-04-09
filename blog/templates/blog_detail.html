@@ -15,7 +15,7 @@
             <div class="col-xs-10 col-xs-offset-1">
                 <h2>{{ blog.title }}</h2>
                 <ul class="blog_detail ">
-                    <li><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog:user_blogs' blog.author.id %}"">{{ blog.author.username }}</a></li>
+                    <li><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog:user_blogs' blog.author.id %}">{{ blog.author.username }}</a></li>
                     <li><span class="glyphicon glyphicon-tag" aria-hidden="true"></span>&nbsp;&nbsp;<a href="{% url 'blog:blogs_with_type' blog.blog_type.id %}">{{ blog.blog_type.type_name }}</a></li>
                     <li><span class="glyphicon glyphicon-time" aria-hidden="true"></span>&nbsp;&nbsp;{{ blog.last_updated_time|date:"Y-m-d" }}</li>
                     <li><span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>{{ blog.get_read_num }}
@@ -44,6 +44,51 @@
                   </ul>
                 </nav>
             </div>       
+        </div>
+        <div class="row">
+            <div class="col-xs-10 col-xs-offset-1">
+                <div class="comment-area">
+                    <h3 class="comment-area-title">提交评论</h3>
+                    {% if user.is_authenticated  %}
+                            {{ user }}欢迎你
+                            <form action="{% url "comment:update" %}" method="post">
+                                {% csrf_token %}
+                                <div style="margin-bottom: 1em">
+                                    <textarea id="comment-text" name="text" class="form-control" rows="4" ></textarea>
+                                    <input type="hidden" name="object_id" value="{{ blog.id }}">
+                                    <input type="hidden" name="content_type" value="blog">
+                                </div>
+                                <button type="submit" class="btn btn-primary" style="float: right">提交</button>
+                            </form>
+                        {% else %}
+                            <form class="form-inline" action="{% url 'login' %}" method="post">
+                                {% csrf_token %}
+                              <div class="form-group">
+                                <input type="text" class="form-control"  name="username" placeholder="username">
+                              </div>
+                              <div class="form-group">
+                                <input type="password" class="form-control"  name="password" placeholder="password">
+                              </div>
+                              <button type="submit" class="btn btn-primary" >登陆</button>
+                            </form>
+                    {% endif %}
+                </div>
+                <div class="comment-area" style="overflow: hidden">
+                    <h3 class="comment-area-title"> 评论内容列表</h3>
+
+                        {% for comment in comments %}
+                            <div>
+                                {{ comment.user.username }}
+                                {{ comment.comment_time|date:"Y-m-d" }}
+                                <br/>
+                                {{ comment.text }}
+                            <div>
+                        {% empty %}
+                            暂无评论
+                        {% endfor %}
+
+                </div>
+            </div>
         </div>
     </div>
 

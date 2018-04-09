@@ -22,3 +22,12 @@ p.blog_content{
 div#paginater{
     text-align: center;
 }
+
+div.comment-area{
+    margin-top: 2em;
+}
+
+h3.comment-area-title{
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.4em;
+}
