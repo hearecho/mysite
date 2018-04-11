@@ -2,6 +2,7 @@ from .models import Blog,BlogType
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.db.models import Count
+from mysite.forms import LoginForm,RegForm
 #公用函数
 Each_page_num = 4
 
@@ -59,5 +60,10 @@ def get_blogs_common_list(request,blogs_all):
     context['page_range'] = page_range
     context['blog_dates'] = blog_dates_dict
 
-
     return context
+
+def pro_loginform_template(request):
+    login_form = LoginForm()
+    reg_form = RegForm()
+
+    return {'login_form':login_form,'reg_form':reg_form}
