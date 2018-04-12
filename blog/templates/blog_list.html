@@ -30,8 +30,9 @@
                             &nbsp;&nbsp;&nbsp;
                             <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>{{ blog.get_read_num}}
                         </p>
-                        <p>{{ blog.content|striptags|truncatewords:"3" }}...</p>
+                        <p>{{ blog.content|striptags|truncatewords:"6"|safe }}...</p>
                         <!-- 这个truncatewords 是百分比 -->
+
                         <hr/>
                     {% empty %}
                     <p>-- 暂无博客 --</p>

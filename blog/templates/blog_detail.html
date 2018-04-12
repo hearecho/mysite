@@ -6,6 +6,8 @@
 {% load staticfiles %}
 {% block css_extends %}
     <link rel="stylesheet" type="text/css" href="{% static 'blog/css/blog.css'%}">
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+    <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 {% endblock %}
 
 {% block content%}
@@ -42,6 +44,7 @@
                         <li class="next disabled"><a href="#"><span aria-hidden="true">&rarr;</span>下一篇</a></li>
                     {% endif %}
                   </ul>
+
                 </nav>
             </div>       
         </div>
@@ -50,16 +53,15 @@
                 <div class="comment-area">
                     <h3 class="comment-area-title">提交评论</h3>
                     {% if user.is_authenticated  %}
-                            {{ user }}欢迎你
-                            <form action="{% url "comment:update" %}" method="post">
+                            <form id = "comment_form" action="#" method="post">
                                 {% csrf_token %}
-                                <div style="margin-bottom: 1em">
-                                    <textarea id="comment-text" name="text" class="form-control" rows="4" ></textarea>
-                                    <input type="hidden" name="object_id" value="{{ blog.id }}">
-                                    <input type="hidden" name="content_type" value="blog">
-                                </div>
+                                {% for field in comment_form %}
+                                    {{ field }}
+                                {% endfor %}
+                            <span class="pull-left text-danger" id="comment_error"></span>
                                 <button type="submit" class="btn btn-primary" style="float: right">提交</button>
                             </form>
+
                         {% else %}
                             评论请登陆~~~~~<a href='#' data-toggle="modal" data-target="#login"
                                          class="btn btn-primary " role="button">登陆</a>
@@ -70,22 +72,67 @@
                 </div>
                 <div class="comment-area" style="overflow: hidden">
                     <h3 class="comment-area-title"> 评论内容列表</h3>
-
-                        {% for comment in comments %}
-                            <div>
-                                {{ comment.user.username }}
-                                {{ comment.comment_time|date:"Y-m-d" }}
-                                <br/>
-                                {{ comment.text }}
-                            <div>
-                        {% empty %}
-                            暂无评论
-                        {% endfor %}
-
+                        <div id="comment_list">
+                            {% for comment in comments %}
+                                <div>
+                                    {{ comment.user.username }}
+                                    {{ comment.comment_time|date:"Y-m-d H:i:s" }}
+                                    <br/>
+                                    {{ comment.text|safe }}
+                                </div>
+                            {% empty %}
+                                <div id="empty_comment" class="text-danger">暂无评论</div>
+                            {% endfor %}
+                        </div>
                 </div>
             </div>
         </div>
     </div>
+
+{% endblock %}
+{% block script_extend %}
+    <script type="text/javascript">
+        $('#comment_form').submit(function () {
+
+            $("#comment_error").text("");
+            if(CKEDITOR.instances['id_text'].document.getBody().getText().trim() == ""){
+                $("#comment_error").text("评论不能为空");
+                return false;
+            }
+            //更新数据到textarea
+            CKEDITOR.instances['id_text'].updateElement();
+
+            //异步提交
+            $.ajax({
+                url:"{% url "comment:update" %}",
+                type:'POST',
+                data:$(this).serialize(),
+                cache:false,
+                success:function (data) {
+{#                    console.log(data);#}
+                    if(data['status'] =="SUCCESS"){
+                        //插入数据
+                        var comment_html = '<div>'+data['username']+
+                                            '  '+data['comment_time']+'<br/>'
+                                            +data['text']+'</div>';
+                        $("#comment_list").prepend(comment_html)
+                        //清空评论框
+                        CKEDITOR.instances['id_text'].setData("");
+                        $("#empty_comment").remove();
+                    }else{
+                        $("#comment_error").text(data['messsage']);
+                    }
+
+                },
+                error:function (data) {
+
+                }
+                
+            });
+            return false;
+        });
+
+    </script>
 
 {% endblock %}
 

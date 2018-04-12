@@ -7,6 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from . import common_func
 from read_count.utils import read_count_once_read
 from comment.models import Comment
+from comment.forms import CommentForm
 
 
 def blog_list(request):
@@ -22,14 +23,13 @@ def blog_detail(request,blog_id):
     read_count_once_read(request,blog)
     blog_content_type = ContentType.objects.get_for_model(blog)
     comments = Comment.objects.filter(content_type=blog_content_type,object_id=blog.id)
-
     
     context = {}
     context['previous_blog'] = Blog.objects.filter(created_time__gt = blog.created_time).last()
     context['next_blog'] = Blog.objects.filter(created_time__lt = blog.created_time).first()
     context['blog'] = blog
     context['comments'] = comments
-
+    context['comment_form'] = CommentForm(initial={'content_type':blog_content_type.model,'object_id':blog_id})
     response = render(request,'blog_detail.html',context)
     response.set_cookie('blog_{}_readed'.format(blog_id),'true',3600)#设置cookie标记 防止每次点击文章都会增加一次阅读记录
     return response

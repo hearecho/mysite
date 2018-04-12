@@ -1,0 +1,4 @@
+# Python:
+setting.py
+__pycache__
+*.pyc
